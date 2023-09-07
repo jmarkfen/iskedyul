@@ -41,3 +41,11 @@ class TestViews(TestCase):
         # verify the data is saved to database
         saved = Timetable.objects.latest("title")
         self.assertEqual(saved.title, form_data["title"])
+
+    def test_timetable_list(self):
+        """
+        test the timetable list page
+        """
+        response = self.client.get(reverse(views.timetable_list))
+        self.assertEqual(response.status_code, 200)
+    
