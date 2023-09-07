@@ -1,0 +1,16 @@
+{% extends 'iskedyul/components/card.html' %}
+{% block card_body %}
+    <form method="post" action="{{ form_action }}">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md">
+                <div class="mb-3">
+                    <label for="title"  class="form-label">Title</label>
+                    <input type="text" id="title" name="title" class="form-control">
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="next_url" value="{{ next_url }}">
+        {% include 'iskedyul/components/save_button.html' with button_text='Create timetable' %}
+    </form>
+{% endblock card_body %}
