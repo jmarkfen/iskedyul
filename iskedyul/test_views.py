@@ -20,7 +20,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 200)
         context = {
             "form_action": reverse(views.save_timetable),
-            "next_url": reverse(views.create_timetable),
+            "next_url": reverse(views.timetable_list),
         }
         # verify the context data exists in the render
         for key, value in context.items():
