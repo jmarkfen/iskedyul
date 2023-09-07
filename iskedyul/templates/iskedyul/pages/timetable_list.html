@@ -1,0 +1,14 @@
+{% extends 'iskedyul/pages/base.html' %}
+{% block title %}
+    Timetables - Iskedyul
+{% endblock title %}
+{% block content %}
+    <div class="container justify-content-center">
+        <div class="row g-4">
+            <div class="col-12">{% include 'iskedyul/components/timetable_item_card.html' %}</div>
+            {% for timetable in timetables %}
+                <div class="col-md-12">{% include 'iskedyul/components/timetable_item_card.html' %}</div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}
