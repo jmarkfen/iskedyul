@@ -1,0 +1,11 @@
+{% extends 'iskedyul/components/card.html' %}
+{% block card_body %}
+    {% if timetable %}
+        <h5 class="card-title">{{ timetable.title }}</h5>
+        <p class="card-text">id: {{ timetable.id }}</p>
+    {% else %}
+        <a class="stretched-link" href="{% url 'create_timetable' %}"></a>
+        <h5 class="card-title">New..</h5>
+        <p class="card-text">Click to create a new timetable.</p>
+    {% endif %}
+{% endblock card_body %}
