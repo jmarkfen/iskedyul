@@ -48,7 +48,7 @@ class TestViews(TestCase):
         """
         response = self.client.get(reverse(views.timetable_list))
         self.assertEqual(response.status_code, 200)
-    
+
     def test_delete_timetable_dialog(self):
         """
         test confirmation dialog for deleting timetable
