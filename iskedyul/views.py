@@ -26,3 +26,12 @@ def timetable_list(request):
         "timetables": Timetable.objects.all()
     }
     return render(request, template_name, context)
+
+def edit_timetable(request, timetable_id):
+    template_name = "iskedyul/pages/edit_timetable.html"
+    context = {
+        "form_action": reverse(save_timetable),
+        "next_url": reverse(edit_timetable, kwargs={"timetable_id": timetable_id}),
+        "timetable": Timetable.objects.get(pk=timetable_id)
+    }
+    return render(request, template_name, context)
