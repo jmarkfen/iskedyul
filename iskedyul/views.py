@@ -17,7 +17,13 @@ def create_timetable(request):
 
 
 def save_timetable(request):
-    form = TimetableForm(request.POST)
+    timetable_id =  request.POST.get("id")
+    if timetable_id:
+        instance = Timetable.objects.get(pk=timetable_id)
+    form = TimetableForm({
+        "pk": request.POST.get("id"),
+        "title": request.POST.get("title"),
+    }, instance=instance)
     if form.is_valid():
         form.save()
     return redirect(request.POST.get("next_url"))
