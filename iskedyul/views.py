@@ -35,3 +35,18 @@ def edit_timetable(request, timetable_id):
         "timetable": Timetable.objects.get(pk=timetable_id)
     }
     return render(request, template_name, context)
+
+def delete_timetable_dialog(request, timetable_id):
+    template_name = "iskedyul/pages/delete_timetable.html"
+    context = {
+        "form_action": reverse(delete_timetable),
+        "timetable": Timetable.objects.get(pk=timetable_id),
+        "next_url": reverse(timetable_list),
+    }
+    return render(request, template_name, context)
+
+def delete_timetable(request):
+    if request.POST.get("button_choice") == "ok":
+        timetable = Timetable.objects.get(pk=request.POST.get("id"))
+        timetable.delete()
+    return redirect(request.POST.get("next_url"))
