@@ -1,6 +1,7 @@
 {% extends 'iskedyul/components/card.html' %}
 {% block card_body %}
     {% if timetable %}
+        <a class="stretched-link" href="{% url 'edit_timetable' timetable.id %}"></a>
         <h5 class="card-title">{{ timetable.title }}</h5>
         <p class="card-text">id: {{ timetable.id }}</p>
     {% else %}
