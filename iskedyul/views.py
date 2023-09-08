@@ -50,7 +50,8 @@ def delete_timetable_dialog(request, timetable_id):
     context = {
         "form_action": reverse(delete_timetable),
         "timetable": Timetable.objects.get(pk=timetable_id),
-        "next_url": reverse(timetable_list),
+        "ok_url": reverse(timetable_list),
+        "cancel_url": reverse(edit_timetable, kwargs={"timetable_id": timetable_id}),
     }
     return render(request, template_name, context)
 
@@ -59,4 +60,7 @@ def delete_timetable(request):
     if request.POST.get("button_choice") == "ok":
         timetable = Timetable.objects.get(pk=request.POST.get("id"))
         timetable.delete()
-    return redirect(request.POST.get("next_url"))
+        next_url = request.POST.get("ok_url")
+    else:
+        next_url = request.POST.get("cancel_url")
+    return redirect(next_url)
