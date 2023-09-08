@@ -1,3 +1,4 @@
+from ast import arg
 from django.test import TestCase
 from django.urls import reverse
 from iskedyul.models import Timetable
@@ -48,6 +49,26 @@ class TestViews(TestCase):
         """
         response = self.client.get(reverse(views.timetable_list))
         self.assertEqual(response.status_code, 200)
+
+    def test_edit_timetable(self):
+        """
+        test editing a timetable
+        """
+        timetable = Timetable.objects.create(title="Test timetable")
+        args = [
+            timetable.pk,
+        ]
+        response = self.client.get(reverse(views.edit_timetable, args=args))
+        self.assertEqual(response.status_code, 200)
+        context = {
+            "form_action": reverse(views.save_timetable),
+            "next_url": reverse(views.edit_timetable, args=args),
+            "timetable": Timetable.objects.get(pk=timetable.pk),
+        }
+        # verify the context data exists in the render
+        for key, value in context.items():
+            self.assertIn(key, response.context)
+            self.assertEqual(response.context[key], value)
 
     def test_delete_timetable_dialog(self):
         """
