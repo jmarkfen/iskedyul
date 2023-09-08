@@ -1,0 +1,19 @@
+{% extends 'iskedyul/components/card.html' %}
+{% block card_body %}
+    <form method="post" action="{{ form_action }}">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md">
+                <p>{{ timetable.title }}</p>
+                <p>
+                    Are you sure you want to delete this timetable?
+                    This cannot be undone.
+                </p>
+            </div>
+        </div>
+        <input type="hidden" name="id" value="{{ timetable.id }}">
+        <input type="hidden" name="next_url" value="{{ next_url }}">
+        <button type="submit" name="button_choice" value="cancel" class="btn btn-secondary">Cancel</button>
+        <button type="submit" name="button_choice" value="ok" class="btn btn-danger">OK</button>
+    </form>
+{% endblock card_body %}
