@@ -10,9 +10,11 @@
                 </div>
             </div>
         </div>
-        <input type="hidden" name="id" value="{{ timetable.id }}">
         <input type="hidden" name="next_url" value="{{ next_url }}">
         {% include 'iskedyul/components/save_button.html' with button_text='Save timetable' %}
+        {% if timetable %}
+        <input type="hidden" name="id" value="{{ timetable.id }}">
         <a href="{% url 'delete_timetable_dialog' timetable.id %}" class="btn btn-danger">Delete</a>
+        {% endif %}
     </form>
 {% endblock card_body %}
