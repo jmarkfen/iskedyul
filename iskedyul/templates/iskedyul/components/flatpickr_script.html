@@ -1,0 +1,46 @@
+{% load static %}
+<script src="{% static 'flatpickr/flatpickr.js' %}"></script>
+<script>
+
+  const startTimePicker = flatpickr("#id_start_time", {
+      enableTime: true,            // Enable time selection
+      noCalendar: true,           // Hide the calendar
+      dateFormat: "H:i",          // Time format (24-hour)
+      time_24hr: true,
+      minDate: "07:00",           // Minimum time (7:00 AM)
+      maxDate: "20:30",           // Maximum time (8:30 PM)
+      minuteIncrement: 30,        // Set minute step to 30 minutes
+  });
+  const endTimePicker = flatpickr("#id_end_time", {
+      enableTime: true,            // Enable time selection
+      noCalendar: true,           // Hide the calendar
+      dateFormat: "H:i",          // Time format (24-hour)
+      time_24hr: true,
+      maxDate: "20:30",           // Maximum time (8:30 PM)
+      minuteIncrement: 30,        // Set minute step to 30 minutes
+  });
+
+  
+
+  // Set the minDate of the end time picker based on the selected start time
+  startTimePicker.config.onClose.push(function(selectedDates, dateStr, instance) {
+    const startTime = instance.parseDate(dateStr, "H:i");
+
+    // Set min end time to be 30 minutes later than the selected start time
+    const newMinDate = new Date(startTime.getTime() + 30 * 60000);
+    endTimePicker.set("minDate", newMinDate);
+  });
+  
+  endTimePicker.config.onOpen.push(function(selectedDates, dateStr, instance) {
+    // Set the minDate of the end time picker based on the selected start time
+    const startTime = instance.parseDate(startTimePicker.input.value, "H:i");
+
+    if (!startTime) {
+      instance.set("minDate", "07:30");
+    } else {
+      // Set min end time to be 30 minutes later than the selected start time
+      const newMinDate = new Date(startTime.getTime() + 30 * 60000);
+      instance.set("minDate", newMinDate);
+    }
+  });
+</script>

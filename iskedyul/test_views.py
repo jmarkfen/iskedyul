@@ -1,7 +1,7 @@
 from ast import arg
 from django.test import TestCase
 from django.urls import reverse
-from iskedyul.models import Timetable
+from iskedyul.models import Timetable, Event
 
 from iskedyul import views
 
@@ -95,3 +95,33 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 302)  # redirect status: 302 Found
         # verify the model does not exist in the database
         self.assertNotIn(timetable, Timetable.objects.all())
+
+    # def test_create_event(self):
+    #     """
+    #     test the create_event page
+    #     """
+    #     response = self.client.get(reverse(views.create_event))
+    #     self.assertEqual(response.status_code, 200)
+    #     context = {
+    #         "form_action": reverse(views.save_event),
+    #         "next_url": reverse(views.create_event),
+    #     }
+    #     # verify the context data exists in the render
+    #     for key, value in context.items():
+    #         self.assertIn(key, response.context)
+    #         self.assertEqual(response.context[key], value)
+
+    # def test_save_event(self):
+    #     """
+    #     test the save_event form action
+    #     """
+    #     # simulate sending post data to /timetable/save
+    #     form_data = {
+    #         "text": "Timetable A",
+    #         "next_url": reverse(views.create_event),
+    #     }
+    #     response = self.client.post(reverse(views.save_event), data=form_data)
+    #     self.assertEqual(response.status_code, 302)  # redirect status: 302 Found
+    #     # verify the data is saved to database
+    #     saved = Event.objects.latest("text")
+    #     self.assertEqual(saved.title, form_data["text"])

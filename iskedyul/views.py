@@ -1,8 +1,8 @@
-from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from iskedyul.forms import TimetableForm
-from iskedyul.models import Timetable
+from iskedyul import presenters
+from iskedyul.forms import EventForm, TimetableForm
+from iskedyul.models import Event, Timetable
 
 # Create your views here.
 
@@ -17,13 +17,11 @@ def create_timetable(request):
 
 
 def save_timetable(request):
-    timetable_id =  request.POST.get("id")
-    if timetable_id:
-        instance = Timetable.objects.get(pk=timetable_id)
-    form = TimetableForm({
-        "pk": request.POST.get("id"),
-        "title": request.POST.get("title"),
-    }, instance=instance)
+    try:
+        timetable = Timetable.objects.get(pk=request.POST.get("id"))
+        form = TimetableForm(request.POST or None, instance=timetable)
+    except:  # noqa: E722
+        form = TimetableForm(request.POST or None)
     if form.is_valid():
         form.save()
     return redirect(request.POST.get("next_url"))
@@ -35,12 +33,15 @@ def timetable_list(request):
     return render(request, template_name, context)
 
 
-def edit_timetable(request, timetable_id):
+def edit_timetable(request, timetable_id, event=None):
     template_name = "iskedyul/pages/edit_timetable.html"
+    timetable = Timetable.objects.get(pk=timetable_id)
     context = {
         "form_action": reverse(save_timetable),
         "next_url": reverse(edit_timetable, kwargs={"timetable_id": timetable_id}),
-        "timetable": Timetable.objects.get(pk=timetable_id),
+        "timetable": timetable,
+        "event": event,
+        "table": presenters.TimetableViewer(timetable.events),
     }
     return render(request, template_name, context)
 
@@ -64,3 +65,27 @@ def delete_timetable(request):
     else:
         next_url = request.POST.get("cancel_url")
     return redirect(next_url)
+
+
+def edit_event(request, timetable_id, id):
+    event = Event.objects.get(timetable_id=timetable_id, pk=id)
+    return edit_timetable(request, timetable_id, event)
+
+
+def delete_event_dialog(request, timetable_id, event_id):
+    template_name = "iskedyul/pages/delete_event.html"
+    event = Event.objects.get(pk=event_id)
+    timetable = Timetable.objects.get(pk=timetable_id)
+    context = {
+        "event": event,
+        "ok_url": reverse(edit_timetable, kwargs={
+            "timetable_id": timetable_id,
+        }),
+        "cancel_url": reverse(edit_event, kwargs={
+            "timetable_id": timetable_id, 
+            "id": event.id,
+        }),
+        "timetable": timetable,
+        "table": presenters.TimetableViewer(timetable.events),
+    }
+    return render(request, template_name, context)

@@ -1,0 +1,75 @@
+{% extends 'iskedyul/components/card.html' %}
+{% block card_body %}
+
+    <form method="post" action="{% url 'save_event' %}">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-4">
+                <label for="id_text"  class="form-label">Text</label>
+                <textarea rows="3" id="id_text" name="text" class="form-control" required>{{ event.text }}</textarea>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="id_start_time"  class="form-label">Start time</label>
+                            <input type="time"
+                                   id="id_start_time"
+                                   name="start_time"
+                                   class="form-control"
+                                   value="{{ event.start_time|time:'H:i' }}"
+                                   placeholder="Select start time.."
+                                   required>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="id_end_time"  class="form-label">End time</label>
+                            <input type="time"
+                                   id="id_end_time"
+                                   name="end_time"
+                                   class="form-control"
+                                   value="{{ event.end_time|time:'H:i' }}"
+                                   placeholder="Select end time.."
+                                   required>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="id_day" class="form-label">Day</label>
+                            <select id="id_day" name="day" class="form-select" required>
+                                <option selected>Select day..</option>
+                                <option value="1" {% if event.day == 1 %}selected{% endif %}>Monday</option>
+                                <option value="2" {% if event.day == 2 %}selected{% endif %}>Tuesday</option>
+                                <option value="3" {% if event.day == 3 %}selected{% endif %}>Wednesday</option>
+                                <option value="4" {% if event.day == 4 %}selected{% endif %}>Thursday</option>
+                                <option value="5" {% if event.day == 5 %}selected{% endif %}>Friday</option>
+                                <option value="6" {% if event.day == 6 %}selected{% endif %}>Saturday</option>
+                                <option value="7" {% if event.day == 7 %}selected{% endif %}>Sunday</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {% if event %}
+                            <a href="{% url 'edit_timetable' timetable.id %}"
+                               class="btn btn-secondary">Cancel</a>
+                            {% include 'iskedyul/components/save_button.html' with button_text='Save event' %}
+                        {% else %}
+                            {% include 'iskedyul/components/save_button.html' with button_text='Create event' %}
+                        {% endif %}
+                        {% if event %}
+                            <a href="{% url 'delete_event_dialog' event.timetable.id event.id %}"
+                               class="btn btn-danger">Delete</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="timetable" value="{{ timetable.id }}">
+        <input type="hidden" name="id" value="{{ event.id }}">
+        <input type="hidden" name="next_url" value="{{ next_url }}">
+    </form>
+    {% include 'iskedyul/components/flatpickr_script.html' %}
+{% endblock card_body %}

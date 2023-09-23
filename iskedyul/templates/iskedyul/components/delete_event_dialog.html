@@ -1,0 +1,50 @@
+{% extends 'iskedyul/components/card.html' %}
+{% block card_body %}
+    <form method="post" action="{% url 'delete_event' %}">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="id_text"  class="form-label">Text</label>
+                        <textarea rows="3" id="id_text" name="text" class="form-control" disabled>{{ event.text }}</textarea>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-inline">Time: {{ event.start_time|time:'H:i' }}-{{ event.end_time|time:'H:i' }}</div>
+                                <div class="d-inline">
+                                    (
+                                    {% if event.day == 1 %}Monday{% endif %}
+                                    {% if event.day == 2 %}Tuesday{% endif %}
+                                    {% if event.day == 3 %}Wednesday{% endif %}
+                                    {% if event.day == 4 %}Thursday{% endif %}
+                                    {% if event.day == 5 %}Friday{% endif %}
+                                    {% if event.day == 6 %}Saturday{% endif %}
+                                    {% if event.day == 7 %}Sunday{% endif %}
+                                    )
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <p>
+                                    Are you sure you want to delete this event?<br>
+                                    This cannot be undone.
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit"
+                                        name="button_choice"
+                                        value="cancel"
+                                        class="btn btn-secondary">Cancel</button>
+                                <button type="submit" name="button_choice" value="ok" class="btn btn-danger">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="id" value="{{ event.id }}">
+        <input type="hidden" name="ok_url" value="{{ ok_url }}">
+        <input type="hidden" name="cancel_url" value="{{ cancel_url }}">
+    </form>
+{% endblock card_body %}

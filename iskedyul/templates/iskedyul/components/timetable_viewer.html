@@ -1,0 +1,43 @@
+<style>
+    /* Add custom CSS for equal-width columns */
+    .table-fixed {
+        table-layout: fixed;
+        width: 100%;
+    }
+    .table-fixed th, .table-fixed td {
+        width: 20%; /* Set equal width for each column (adjust as needed) */
+        text-align: center; /* Center-align text within cells */
+    }
+    .tbody-tr-fixed tr {
+        height: 20px;
+    }
+</style>
+<div class="border border-secondary-subtle rounded rounded-3">
+    <table class="table table-sm table-bordered border rounded overflow-hidden m-0 table-fixed">
+        <thead>
+            <tr>
+                <th>TIME</th>
+                {% for th in table.head %}<th scope="colgroup" colspan="{{ th.colspan }}">{{ th.day.label|upper }}</th>{% endfor %}
+            </tr>
+        </thead>
+        <tbody class="tbody-tr-fixed">
+            {% for interval, row in table.body.items %}
+                <tr>
+                    <th scope="row" class="fw-normal">{{ interval.start|time:"H:i" }}-{{ interval.end|time:'H:i' }}</th>
+                    {% for td in row %}
+                        {% if td is not None %}
+                            {% if td.empty %}
+                                <td></td>
+                            {% else %}
+                                <td rowspan="{{ td.rowspan }}" class="bg-body-secondary">
+                                    <a href="{% url 'edit_event' timetable.id td.event.id %}"
+                                       class="link-underline link-underline-opacity-0">{{ td.event.text|linebreaks }}</a>
+                                </td>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

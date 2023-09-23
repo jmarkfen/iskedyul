@@ -1,9 +1,9 @@
-{% extends 'iskedyul/pages/timetable_base.html' %}
+{% extends 'iskedyul/pages/edit_timetable.html' %}
 {% block topleft %}
     {% include 'iskedyul/components/timetable_form.html' %}
 {% endblock topleft %}
 {% block topright %}
-    {% include 'iskedyul/components/event_form.html' %}
+    {% include 'iskedyul/components/delete_event_dialog.html' %}
 {% endblock topright %}
 {% block main %}
     {% include 'iskedyul/components/timetable_viewer.html' %}
