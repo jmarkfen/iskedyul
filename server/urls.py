@@ -16,9 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.shortcuts import redirect
+from django.urls import reverse
+
+from iskedyul import views
+
+
+def home(request):
+    return redirect(reverse(views.timetable_list))
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("__reload__", include("django_browser_reload.urls")),
+    path("", home),
     path("", include("iskedyul.urls")),
 ]
