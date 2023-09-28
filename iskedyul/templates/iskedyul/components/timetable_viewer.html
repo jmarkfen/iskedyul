@@ -1,19 +1,20 @@
-<style>
-    /* Add custom CSS for equal-width columns */
-    .table-fixed {
-        table-layout: fixed;
-        width: 100%;
-    }
-    .table-fixed th, .table-fixed td {
-        width: 20%; /* Set equal width for each column (adjust as needed) */
-        text-align: center; /* Center-align text within cells */
-    }
-    .tbody-tr-fixed tr {
-        height: 20px;
-    }
-</style>
-<div class="border border-secondary-subtle rounded rounded-3">
-    <table class="table table-sm table-bordered border rounded overflow-hidden m-0 table-fixed">
+<div class="border border-secondary-subtle rounded rounded-3"  id="printableArea">
+    <style>
+        /* Add custom CSS for equal-width columns */
+        .table-fixed {
+            table-layout: fixed;
+            width: 100%;
+        }
+        .table-fixed th, .table-fixed td {
+            width: 20%; /* Set equal width for each column (adjust as needed) */
+            text-align: center; /* Center-align text within cells */
+        }
+        .tbody-tr-fixed tr {
+            height: 20px;
+        }
+    </style>
+    <table class="table table-sm table-bordered border rounded overflow-hidden m-0 caption-top table-fixed">
+        <caption class="text-center fw-bold">{{ timetable.title }}</caption>
         <thead>
             <tr>
                 <th>TIME</th>
@@ -23,7 +24,7 @@
         <tbody class="tbody-tr-fixed">
             {% for interval, row in table.body.items %}
                 <tr>
-                    <th scope="row" class="fw-normal">{{ interval.start|time:"H:i" }}-{{ interval.end|time:'H:i' }}</th>
+                    <th scope="row" class="fw-normal">{{ interval.start|time:"h:i" }}-{{ interval.end|time:'h:i A' }}</th>
                     {% for td in row %}
                         {% if td is not None %}
                             {% if td.empty %}
@@ -41,3 +42,38 @@
         </tbody>
     </table>
 </div>
+<script>
+    document.addEventListener("keydown", function(event) {
+        // Check if Ctrl (or Cmd on Mac) and P keys are pressed simultaneously
+        if ((event.ctrlKey || event.metaKey) && event.key === "p") {
+            event.preventDefault(); // Prevent the default print dialog
+            printTable();
+        }
+    });
+
+    function addDPrintNoneToAllExceptTableAndElementsWithClass(className) {
+        // Get all elements on the page
+        const allElements = document.querySelectorAll("*");
+      
+        // Iterate over all elements
+        for (const element of allElements) {
+          // Check if the element is a table or a table element, or if it has the specified class name
+          if (element.tagName !== "TABLE" && !element.closest("TABLE") && !element.classList.contains(className)) {
+            // Add the "d-print-none" CSS class to the element
+            element.classList.add("d-print-none");
+          }
+        }
+      }
+      
+    
+    function printTable() {
+        var originalContents = document.body.innerHTML;
+        var printContents = document.getElementById('printableArea').outerHTML;
+        
+        document.body.innerHTML = printContents;
+        
+        window.print();
+        
+        document.body.innerHTML = originalContents;
+    }
+</script>
